@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+
+.search {
+    padding: 40px;
+}
+
+input {
+    border-color: black !important;
+}
+
+.search-btn {
+    background-color: #858585 !important;
+    color: white;
+}
+
+.search-btn:hover {
+    background-color: #333333 !important;
+}

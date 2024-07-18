@@ -1,0 +1,11 @@
+.card {
+    padding: 10px;
+    padding-bottom: 30px;
+    border-color: transparent;
+}
+
+@media (max-width: 770px) {
+    .card {
+        padding-bottom: 60px;
+    }
+}
