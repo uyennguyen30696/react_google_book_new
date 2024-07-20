@@ -8,6 +8,17 @@ Check out the deployed application [here]().
 
 ### Demo
 
-## Technologies
+### Technologies
+
+* MongoDB
+* Express
+* [ReactJS](https://reactjs.org/)
+* NodeJS
+* [Google book API](https://developers.google.com/books/docs/v1/getting_started)
 
 ### Instructions
+
+To run this app on your local:
+* Clone this repo
+* Run `npm install` to install all necessary dependencies
+* Run `npm start` to start the application 
