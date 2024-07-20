@@ -19,7 +19,7 @@ const Home = () => {
         setSearchTriggered(true);
         API.getBooks(q)
             .then((res) => {
-                console.log(res.data.items);
+                console.log('API data', res.data.items)
                 setBooks(res.data.items);
                 setMessage(res.data.items.length === 0 ? 'No book matches your search!' : '');
             })
