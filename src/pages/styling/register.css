@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+
+.register .form-container {
+    margin: 40px auto;  
+    margin-bottom: 100px;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px; 
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.jumbotron {
+    margin-bottom: 0;
+}
+
+.register h2 {
+    margin-bottom: 20px;
+    font-family: 'Courgette', 'cursive';
+}
+
+.register form {
+    width: 100%;
+    max-width: 400px;
+}

@@ -7,6 +7,8 @@ import {
 import NavBar from './components/NavBar/NavBar'
 import Footer from './components/Footer/Footer'
 
+import Login from './pages/Login'
+import Register from './pages/Register'
 import Home from './pages/Home'
 import MyShelves from './pages/MyShelves'
 import NotFound from './pages/NotFound'
@@ -20,9 +22,13 @@ function App() {
         <NavBar />
 
         <Routes>
-          <Route exact path='/' element={<Home />} />
+          <Route path='/' element={<Home />} />
           <Route path='/my-shelves' element={<MyShelves />} />
           <Route path='*' element={<NotFound />} />
+
+          {/* Testing */}
+          <Route exact path='/login' element={<Login />} />
+          <Route exact path='/register' element={<Register />} />
         </Routes>
 
         <Footer />
