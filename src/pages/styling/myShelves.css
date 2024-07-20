@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+
+#dropdown-btn {
+    margin-left: 30px;
+    margin-bottom: 30px;
+}
+
+.sort-btn {
+    border-color: transparent;
+    padding: 0;
+    background-color: transparent;
+    color: black;
+}
+
+.sort-btn:hover {
+    border-color: transparent;
+    background-color: transparent;
+    color: black;
+}
+
+#saved-message {
+    text-align: center;
+    font-family: 'Courgette', 'cursive';
+    margin-bottom: 100px;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 100px;
+    background-color: #B61624;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+    color: white;
+}
+
+@media (max-width: 770px) {
+    .book-container {
+        padding-top: 50px;
+    }
+
+    .delete-btn {
+        top: -35px;
+    }
+}

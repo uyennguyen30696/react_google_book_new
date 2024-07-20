@@ -9,7 +9,20 @@ const API = {
     // Method for interacting with database
     addBook: (bookData) => {
         return axios.post('/api/books', bookData);
-    }
+    },
+
+    // Method for retrieving all saved books from database
+    getSavedBooks: () => {
+        return axios.get('/api/books');
+    },
+
+    deleteBook: (id) => {
+        return axios.delete(`/api/books/${id}`);
+    },
+
+    // getBookById: function (id) {
+    // return axios.get(`/api/books/${id}`);
+    // },
 
 };
 

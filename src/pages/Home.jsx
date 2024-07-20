@@ -1,10 +1,9 @@
+import { useState } from 'react';
 import Jumbotron from '../components/Jumbotron/Jumbotron';
 import Card from '../components/Card/Card';
 import API from '../utils/API';
 
-import { useState } from 'react';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-
 import './styling/home.css';
 
 const Home = () => {
