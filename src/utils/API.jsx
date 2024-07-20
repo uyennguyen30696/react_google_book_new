@@ -3,7 +3,14 @@
 import axios from 'axios';
 
 const API = {
-    getBooks: (q) => axios.get(`/api/search?q=${q}`)
+    // Method for retrieving book data from API
+    getBooks: (q) => axios.get(`/api/search?q=${q}`),
+
+    // Method for interacting with database
+    addBook: (bookData) => {
+        return axios.post('/api/books', bookData);
+    }
+
 };
 
 export default API;

@@ -52,7 +52,7 @@ const Home = () => {
     const handleBookSave = (id) => {
         const book = books.find((book) => book.id === id);
 
-        API.saveBook({
+        API.addBook({
             googleId: book.id,
             title: book.volumeInfo.title,
             authors: book.volumeInfo.authors,
