@@ -12,17 +12,18 @@ const API = {
 
     // Method for retrieving book data from API
     getBooks: (q) => {
-        const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
-        return axios.get(`/api/search?q=${q}`, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
+        return axios.get(`/api/search?q=${q}`); 
     },
 
     // Method for interacting with database
     addBook: (bookData) => {
         const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
+        console.log('Token:', token);
+        console.log('Book Data:', bookData); // Log the book data
         return axios.post('/api/books', bookData, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
     },
 
-    // Method for retrieving all saved books from database
+    // Method for retrieving all saved books from database for the logged in user
     getSavedBooks: () => {
         const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
         return axios.get('/api/books', { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers

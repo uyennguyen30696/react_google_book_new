@@ -60,7 +60,7 @@ const Login = () => {
                             onChange={handlePasswordChange}
                         />
                     </InputGroup>
-                    <Button variant='primary' type='submit'>Login</Button>
+                    <Button id='login-btn' variant='primary' type='submit'>Login</Button>
                 </form>
                 {message && <p>{message}</p>}
             </div>

@@ -21,3 +21,8 @@
     width: 100%;
     max-width: 400px;
 }
+
+#register-btn {
+    background-color: grey;
+    border-color: grey;
+}

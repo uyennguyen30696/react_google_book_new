@@ -1,12 +1,16 @@
+import './styling/notFound.css';
 
 const NotFound = () => {
     return (
-        <>
-            <div className='not-found'>
-                <h1>Page not found</h1>
-            </div>
-        </>
+        <div id="notFound-page">
+            <h1 className="text-center">404 Page Not Found</h1>
+            <h1 className="text-center">
+                <span role="img" aria-label="Face With Rolling Eyes Emoji">
+                    🙄
+                </span>
+            </h1>
+        </div>
     )
-}
+};
 
-export default NotFound
+export default NotFound;

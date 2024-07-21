@@ -80,7 +80,7 @@ const Register = () => {
                             onChange={handleConfirmPasswordChange}
                         />
                     </InputGroup>
-                    <Button variant='primary' type='submit'>Register</Button>
+                    <Button id='register-btn' variant='primary' type='submit'>Register</Button>
                 </form>
                 {message && <p>{message}</p>}
             </div>

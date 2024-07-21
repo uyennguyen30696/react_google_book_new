@@ -21,3 +21,8 @@
     width: 100%;
     max-width: 400px;
 }
+
+#login-btn {
+    background-color: grey;
+    border-color: grey;
+}

@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const apiRoutes = require('./routes/apiRoutes');
 const bookRoutes = require('./routes/bookRoutes');
 const authMiddleware = require('./services/authMiddleware'); // Import middleware
+require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
 const PORT = process.env.PORT || 3001;

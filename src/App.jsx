@@ -22,13 +22,11 @@ function App() {
         <NavBar />
 
         <Routes>
+          <Route exact path='/login' element={<Login />} />
+          <Route exact path='/register' element={<Register />} />
           <Route path='/' element={<Home />} />
           <Route path='/my-shelves' element={<MyShelves />} />
           <Route path='*' element={<NotFound />} />
-
-          {/* Testing */}
-          <Route exact path='/login' element={<Login />} />
-          <Route exact path='/register' element={<Register />} />
         </Routes>
 
         <Footer />
