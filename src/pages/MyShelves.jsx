@@ -125,7 +125,7 @@ const MyShelves = () => {
                         </div>
                     </div>
                 ) : (
-                    <h2 id="my-shelves-message">{message}</h2>
+                    <h2 id="saved-message">{message}</h2>
                 )}
             </div>
         </div>

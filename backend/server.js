@@ -1,28 +1,21 @@
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db.js');
-const authRoutes = require('./routes/authRoutes'); 
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
 const apiRoutes = require('./routes/apiRoutes');
-const bookRoutes = require('./routes/bookRoutes.js');
+const bookRoutes = require('./routes/bookRoutes');
+const authMiddleware = require('./services/authMiddleware'); // Import middleware
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Connect to MongoDB
-connectDB();
+connectDB(); // Connect to MongoDB
 
-// Middleware to parse JSON request bodies
-app.use(express.json());
+app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(cors()); // Middleware to allow cross-origin requests
 
-// Middleware to allow cross-origin requests
-app.use(cors());
+app.use('/api/auth', authRoutes); // Public routes for user authentication
+app.use('/api', apiRoutes); // Public API routes for Google Books API
+app.use('/api/books', authMiddleware, bookRoutes); // Protected routes for book operations
 
-// Use routes from the routes folder
-app.use('/api/auth', authRoutes); // Authenticate for user login
-app.use('/api', apiRoutes); // Google book API routes
-app.use('/api/books', bookRoutes); // Routes for communicating with database
-
-// Start the server and listen for incoming requests
-app.listen(PORT, () => {
-    console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
-});
+app.listen(PORT, () => console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`));

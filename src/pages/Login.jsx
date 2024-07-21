@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Jumbotron from '../components/Jumbotron/Jumbotron';
 import API from '../utils/API';
-
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import './styling/login.css';
 
@@ -24,8 +23,9 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await API.login(username, password);
-            setMessage(response.data.message);
-            navigate('/'); // Redirect to home page if user logged in successfully
+            sessionStorage.setItem('token', response.data.token); // Store JWT token in sessionStorage
+            sessionStorage.setItem('username', username); // Store username in sessionStorage
+            navigate('/'); // Redirect to home page on successful login
         } catch (error) {
             setMessage(error.response?.data?.message || 'An error occurred');
         }

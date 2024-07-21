@@ -3,36 +3,36 @@
 import axios from 'axios';
 
 const API = {
-
+    
     // Method for user register
     register: (username, password) => axios.post('/api/auth/register', { username, password }),
 
     // Method for logging in
-    login: (username, password) => {
-        return axios.post('/api/auth/login', { username, password });
-    },
+    login: (username, password) => axios.post('/api/auth/login', { username, password }),
 
     // Method for retrieving book data from API
-    getBooks: (q) => axios.get(`/api/search?q=${q}`),
+    getBooks: (q) => {
+        const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
+        return axios.get(`/api/search?q=${q}`, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
+    },
 
     // Method for interacting with database
     addBook: (bookData) => {
-        return axios.post('/api/books', bookData);
+        const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
+        return axios.post('/api/books', bookData, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
     },
 
     // Method for retrieving all saved books from database
     getSavedBooks: () => {
-        return axios.get('/api/books');
+        const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
+        return axios.get('/api/books', { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
     },
 
+    // Method for deleting a book
     deleteBook: (id) => {
-        return axios.delete(`/api/books/${id}`);
+        const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
+        return axios.delete(`/api/books/${id}`, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
     },
-
-    // getBookById: function (id) {
-    // return axios.get(`/api/books/${id}`);
-    // },
-
 };
 
 export default API;
