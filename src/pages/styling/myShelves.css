@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
 
-#dropdown-btn {
+.button-container {
     margin-left: 30px;
     margin-bottom: 30px;
+}
+
+.refresh-btn {
+    margin-left: 10px;
 }
 
 .sort-btn {

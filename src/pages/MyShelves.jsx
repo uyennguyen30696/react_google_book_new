@@ -42,9 +42,10 @@ const MyShelves = () => {
         if (title) {
             API.getOneSavedBook({ title })
                 .then(res => {
-                    setBooks(res.data);
                     if (!res.data.length) {
                         setMessage("There is no book that matches your search!");
+                    } else {
+                        setBooks(res.data);
                     }
                 })
                 .catch(err => console.log(err));
@@ -55,6 +56,12 @@ const MyShelves = () => {
         if (e.keyCode === 13) {
             handleSearchTitle(e);
         }
+    };
+
+    const handleRefresh = () => {
+        setTitle(""); // Clear the search input
+        setMessage("You have no saved book yet!"); // Reset the message
+        loadSavedBooks(); // Reload the saved books
     };
 
     const sortByTitle = (e) => {
@@ -91,7 +98,7 @@ const MyShelves = () => {
             <div>
                 {books.length ? (
                     <div>
-                        <div id="dropdown-btn">
+                        <div className="button-container">
                             <Dropdown as={ButtonGroup}>
                                 <Button variant="success">Sort By</Button>
                                 <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
@@ -101,6 +108,13 @@ const MyShelves = () => {
                                     <Dropdown.Item onClick={sortByAuthor}>Author</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
+                            <Button
+                                className="refresh-btn"
+                                variant="outline-secondary"
+                                onClick={handleRefresh}
+                            >
+                                Refresh
+                            </Button>
                         </div>
                         <div className="book-container">
                             {books.map((result) => (

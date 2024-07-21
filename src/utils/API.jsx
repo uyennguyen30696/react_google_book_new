@@ -34,6 +34,12 @@ const API = {
         const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
         return axios.delete(`/api/books/${id}`, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
     },
+
+    // Method for retrieving a specific book by title for the logged in user
+    getOneSavedBook: (title) => {
+        const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
+        return axios.post('/api/books/search', title, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
+    },
 };
 
 export default API;

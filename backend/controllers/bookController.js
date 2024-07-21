@@ -75,4 +75,30 @@ const deleteBook = async (req, res) => {
     }
 };
 
-module.exports = { addBook, getSavedBooks, deleteBook };
+// Retrieve a specific book the logged in user searches for by title
+const getOneSavedBook = async (req, res) => {
+    const { title } = req.body; // Get the title from the request body
+    const userId = req.user.userId; // Get the user ID from the authenticated request
+
+    try {
+        // Find the book by title in the user's collection and populate book details
+        const userBooks = await UserBooks.find({ user: userId }).populate({
+            path: 'book',
+            match: { title: new RegExp(title, 'i') } // Case-insensitive and partial match
+        });
+
+        // Filter out any null results (if the book doesn't match the title)
+        const books = userBooks.map(userBook => userBook.book).filter(book => book);
+
+        if (books.length === 0) {
+            res.status(200).json({ message: 'There is no book that matches your search!' });
+        } else {
+            res.status(200).json(books);
+        }
+    } catch (error) {
+        console.error('Error retrieving book:', error);
+        res.status(500).json({ error: 'Failed to retrieve book.' });
+    }
+};
+
+module.exports = { addBook, getSavedBooks, deleteBook, getOneSavedBook };
