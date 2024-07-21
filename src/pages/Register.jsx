@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import { useNavigate, Link } from 'react-router-dom';
 import Jumbotron from '../components/Jumbotron/Jumbotron';
+import API from '../utils/API';
 
+import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import './styling/register.css';
 
 const Register = () => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate(); // Handle redirecting routes
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
+    const handleUsernameChange = (e) => {
+        setUsername(e.target.value);
     };
 
     const handlePasswordChange = (e) => {
@@ -21,13 +25,20 @@ const Register = () => {
         setConfirmPassword(e.target.value);
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            console.log("Passwords do not match");
+            setMessage("Passwords do not match");
         } else {
-            console.log("Email:", email, "Password:", password);
-            // Simulate registration
+            try {
+                const response = await API.register(username, password);
+                setMessage(response.data.message);
+                setTimeout(() => {
+                    navigate('/login'); // Redirect to login page after 3 seconds
+                }, 3000);
+            } catch (error) {
+                setMessage(error.response?.data?.message || 'An error occurred');
+            }
         }
     };
 
@@ -36,14 +47,19 @@ const Register = () => {
             <Jumbotron />
             <div className='form-container'>
                 <h2>Register</h2>
+
+                <div className="login-redirect">
+                    <p>Already have an account? <Link to="/login">Login here</Link></p>
+                </div>
+                
                 <form onSubmit={handleFormSubmit}>
                     <InputGroup className='mb-3'>
                         <FormControl
-                            type='email'
-                            placeholder='Email'
-                            aria-label='Email'
-                            value={email}
-                            onChange={handleEmailChange}
+                            type='text'
+                            placeholder='Username'
+                            aria-label='Username'
+                            value={username}
+                            onChange={handleUsernameChange}
                         />
                     </InputGroup>
                     <InputGroup className='mb-3'>
@@ -66,6 +82,7 @@ const Register = () => {
                     </InputGroup>
                     <Button variant='primary' type='submit'>Register</Button>
                 </form>
+                {message && <p>{message}</p>}
             </div>
         </div>
     );

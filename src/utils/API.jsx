@@ -3,6 +3,15 @@
 import axios from 'axios';
 
 const API = {
+
+    // Method for user register
+    register: (username, password) => axios.post('/api/auth/register', { username, password }),
+
+    // Method for logging in
+    login: (username, password) => {
+        return axios.post('/api/auth/login', { username, password });
+    },
+
     // Method for retrieving book data from API
     getBooks: (q) => axios.get(`/api/search?q=${q}`),
 

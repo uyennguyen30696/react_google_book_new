@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db.js');
+const authRoutes = require('./routes/authRoutes'); 
 const apiRoutes = require('./routes/apiRoutes');
 const bookRoutes = require('./routes/bookRoutes.js');
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 // Use routes from the routes folder
+app.use('/api/auth', authRoutes); // Authenticate for user login
 app.use('/api', apiRoutes); // Google book API routes
 app.use('/api/books', bookRoutes); // Routes for communicating with database
 
