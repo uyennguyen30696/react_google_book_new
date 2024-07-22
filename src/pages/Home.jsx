@@ -1,22 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Jumbotron from '../components/Jumbotron/Jumbotron';
 import Card from '../components/Card/Card';
 import API from '../utils/API';
 
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import './styling/home.css';
+import { FaTimes } from 'react-icons/fa';
 
 const Home = () => {
     const [books, setBooks] = useState([]);
-    const [q, setQ] = useState('');
+    const [input, setInput] = useState('');
     const [message, setMessage] = useState('Search for books to begin!');
     const [searchTriggered, setSearchTriggered] = useState(false);  
+    const [savedBooks, setSavedBooks] = useState(new Set()); // Track saved book IDs for "save button" status control
+
+    // Fetch saved books when component mounts
+    // Do this before searching from google book API so books that have been saved for the logged in user will not have active save button anymore
+    useEffect(() => {
+        API.getSavedBooks()
+            .then((res) => {
+                const savedBookIds = new Set(res.data.map(book => book.googleId));
+                setSavedBooks(savedBookIds);
+            })
+            .catch((err) => console.log(err));
+    }, []);
 
     const search = () => {
         if (searchTriggered) return; // Prevent duplicate calls when hitting "Enter" button
 
         setSearchTriggered(true);
-        API.getBooks(q)
+        API.getBooks(input)
             .then((res) => {
                 console.log('API data', res.data.items)
                 setBooks(res.data.items);
@@ -33,7 +46,11 @@ const Home = () => {
     };
 
     const handleInputChange = (e) => {
-        setQ(e.target.value);
+        setInput(e.target.value);
+    };
+
+    const handleClearInput = () => {
+        setInput(''); // Clear the input field
     };
 
     const handleFormSubmit = (e) => {
@@ -59,7 +76,10 @@ const Home = () => {
             image: book.volumeInfo.imageLinks.thumbnail,
             description: book.volumeInfo.description,
         })
-            .then(() => search())
+            .then(() => {
+                // Update savedBooks state after saving
+                setSavedBooks(prev => new Set(prev).add(id));
+            })
             .catch((err) => console.log(err));
     };
 
@@ -71,12 +91,23 @@ const Home = () => {
                 <form onSubmit={handleFormSubmit}>
                     <InputGroup className='mb-3'>
                         <FormControl
+                            className='input-with-white-right-border'
                             placeholder='Search books...'
                             aria-label='Search books'
                             aria-describedby='search-button'
                             onChange={handleInputChange}
                             onKeyDown={handleEnterKey}
+                            value={input}
                         />
+                        {input && ( // Show clear button only if there's text in the input
+                        <Button
+                            className='clear-btn'
+                            variant='outline-secondary'
+                            onClick={handleClearInput}
+                        >
+                            <FaTimes />
+                        </Button>
+                        )}
                         <Button
                             className='search-btn'
                             variant='outline-secondary'
@@ -102,13 +133,14 @@ const Home = () => {
                                 description={result.volumeInfo.description || 'No description available'}  // Default description
                                 image={result.volumeInfo.imageLinks?.thumbnail || 'default-image-url'}  // Fallback to default image if not available
                                 Button={() => (
-                                    <button
-                                        className='btn save-btn'
+                                    <Button
+                                        className={`save-btn ${savedBooks.has(result.id) ? 'saved' : ''}`}
                                         type='button'
-                                        onClick={() => handleBookSave(result.id)}
+                                        onClick={() => !savedBooks.has(result.id) && handleBookSave(result.id)}
+                                        disabled={savedBooks.has(result.id)}
                                     >
-                                        Save
-                                    </button>
+                                        {savedBooks.has(result.id) ? 'Saved' : 'Save'}
+                                    </Button>
                                 )}
                             />
                         ))}

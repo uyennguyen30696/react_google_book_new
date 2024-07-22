@@ -1,7 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
 
+.input-with-white-right-border {
+    border-right: white !important;
+}
+
+.clear-btn {
+    border-color: black black black white;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.clear-btn:hover {
+    border-color: black black black white;
+    color: gray;
+    background-color: white;
+}
+
 .search-container {
     padding: 40px;
+}
+
+.search-container .form-control:focus {
+    box-shadow: none; /* Remove the default box-shadow */
+    border-color: transparent; /* Remove the default border color */
 }
 
 input {
@@ -38,11 +59,23 @@ input {
     width: 100px;
     background-color: #4C8844;
     color: white;
+    border-color: #4C8844;
 }
 
 .save-btn:hover {
     background-color: #3C6D37;
     color: white;
+    border-color: #3C6D37;
+}
+
+.save-btn.saved {
+    background-color: gray; /* Color for the saved button */
+    border-color: gray;
+    cursor: not-allowed; /* Show that the button is not clickable */
+}
+
+.save-btn.saved:hover {
+    border-color: gray;
 }
 
 @media (max-width: 770px) {

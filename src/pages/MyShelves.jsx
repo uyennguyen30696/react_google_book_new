@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
-import Jumbotron from "../components/Jumbotron/Jumbotron";
-import Card from "../components/Card/Card";
-import API from "../utils/API";
+import { useEffect, useState } from 'react';
+import Jumbotron from '../components/Jumbotron/Jumbotron';
+import Card from '../components/Card/Card';
+import API from '../utils/API';
 
-import { InputGroup, FormControl, Button, Dropdown, ButtonGroup } from "react-bootstrap";
+import { InputGroup, FormControl, Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import './styling/myShelves.css';
+import { FaTimes } from 'react-icons/fa';
 
 const MyShelves = () => {
     const [books, setBooks] = useState([]);
-    const [title, setTitle] = useState("");
-    const [message, setMessage] = useState("You have no saved book yet!");
+    const [title, setTitle] = useState('');
+    const [message, setMessage] = useState('You have no saved book yet!');
 
     useEffect(() => {
         loadSavedBooks();
@@ -43,7 +44,7 @@ const MyShelves = () => {
             API.getOneSavedBook({ title })
                 .then(res => {
                     if (!res.data.length) {
-                        setMessage("There is no book that matches your search!");
+                        setMessage('There is no book that matches your search!');
                     } else {
                         setBooks(res.data);
                     }
@@ -58,10 +59,12 @@ const MyShelves = () => {
         }
     };
 
+    const handleClearInput = () => {
+        setTitle(''); // Clear the input field
+    };
+
     const handleRefresh = () => {
-        setTitle(""); // Clear the search input
-        setMessage("You have no saved book yet!"); // Reset the message
-        loadSavedBooks(); // Reload the saved books
+        window.location.reload(); // Reload the current page
     };
 
     const sortByTitle = (e) => {
@@ -77,18 +80,29 @@ const MyShelves = () => {
     return (
         <div className='my-shelves'>
             <Jumbotron />
-            <div className="search-container">
-                <InputGroup className="mb-3">
+            <div className='search-container'>
+                <InputGroup className='mb-3'>
                     <FormControl
-                        placeholder="Search in my list..."
-                        aria-label="Search in my list"
-                        aria-describedby="search-button"
+                        className='input-with-white-right-border'
+                        placeholder='Search in my list...'
+                        aria-label='Search in my list'
+                        aria-describedby='search-button'
                         onChange={handleSearchInput}
                         onKeyDown={handleEnterKey}
+                        value={title}
                     />
+                    {title && ( // Show clear button only if there's text in the input
+                        <Button
+                            className='clear-btn'
+                            variant='outline-secondary'
+                            onClick={handleClearInput}
+                        >
+                            <FaTimes />
+                        </Button>
+                    )}
                     <Button
-                        className="search-btn"
-                        variant="outline-secondary"
+                        className='search-btn'
+                        variant='outline-secondary'
                         onClick={handleSearchTitle}
                     >
                         Search
@@ -98,10 +112,10 @@ const MyShelves = () => {
             <div>
                 {books.length ? (
                     <div>
-                        <div className="button-container">
+                        <div className='button-container'>
                             <Dropdown as={ButtonGroup}>
-                                <Button variant="success">Sort By</Button>
-                                <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+                                <Button variant='success'>Sort By</Button>
+                                <Dropdown.Toggle split variant='success' id='dropdown-split-basic' />
                                 <Dropdown.Menu>
                                     <Dropdown.Item onClick={sortByTitle}>Title</Dropdown.Item>
                                     <Dropdown.Divider />
@@ -109,26 +123,26 @@ const MyShelves = () => {
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Button
-                                className="refresh-btn"
-                                variant="outline-secondary"
+                                className='refresh-btn'
+                                variant='outline-secondary'
                                 onClick={handleRefresh}
                             >
                                 Refresh
                             </Button>
                         </div>
-                        <div className="book-container">
+                        <div className='book-container'>
                             {books.map((result) => (
                                 <Card
                                     key={result._id}
                                     title={result.title || 'No title'}
-                                    authors={result.authors.join(", ") || 'Unknown author'}
+                                    authors={result.authors.join(', ') || 'Unknown author'}
                                     link={result.link || 'No link available'}
                                     description={result.description || 'No description available'}
                                     image={result.image || 'default-image-url'}
                                     Button={() => (
                                         <button
-                                            className="btn delete-btn"
-                                            type="button"
+                                            className='btn delete-btn'
+                                            type='button'
                                             onClick={() => handleBookDelete(result._id)}
                                         >
                                             Delete
@@ -139,7 +153,7 @@ const MyShelves = () => {
                         </div>
                     </div>
                 ) : (
-                    <h2 id="saved-message">{message}</h2>
+                    <h2 id='saved-message'>{message}</h2>
                 )}
             </div>
         </div>

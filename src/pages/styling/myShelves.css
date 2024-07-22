@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
 
+.input-with-white-right-border {
+    border-right: white !important;
+}
+
 .button-container {
     margin-left: 30px;
     margin-bottom: 30px;
