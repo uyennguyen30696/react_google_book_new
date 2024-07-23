@@ -4,25 +4,44 @@
     border-right: white !important;
 }
 
-.button-container {
+.dropdown-container {
     display: flex;
     justify-content: center; 
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    gap: 10px; 
+}
+
+.dropdown-container .btn {
+    margin: 0; 
+    height: 40px; 
+    border: 1px solid lightgray;
+}
+
+.dropdown-container .btn-group, 
+.dropdown-container .dropdown {
+    margin: 0; /* Align dropdown buttons with other buttons */
 }
 
 .refresh-btn {
     margin-left: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    height: 40px; /* Match height with status buttons */
+    border: 1px solid lightgray; 
 }
 
 .sort-btn {
-    border-color: transparent;
-    padding: 0;
+    border-color: lightgray; 
+    padding: 10px 20px;
     background-color: transparent;
     color: black;
+    font-size: 16px;
+    height: 40px; /* Ensure height consistency */
+    line-height: 40px; /* Center text vertically */
 }
 
 .sort-btn:hover {
-    border-color: transparent;
+    border-color: lightgray; /* Keep light border on hover */
     background-color: transparent;
     color: black;
 }

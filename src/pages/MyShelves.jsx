@@ -11,15 +11,17 @@ const MyShelves = () => {
     const [books, setBooks] = useState([]);
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('You have no saved book yet!');
+    const [statusFilter, setStatusFilter] = useState('all');
 
     useEffect(() => {
         loadSavedBooks(); // Load books initially
     }, []); 
 
-    const loadSavedBooks = () => {
+    const loadSavedBooks = (status = 'all') => {
         API.getSavedBooks()
             .then(res => {
-                setBooks(res.data);
+                const filteredBooks = status === 'all' ? res.data : res.data.filter(book => book.status === status);
+                setBooks(filteredBooks);
             })
             .catch(err => console.log(err));
     };
@@ -27,7 +29,7 @@ const MyShelves = () => {
     const handleBookDelete = (id) => {
         API.deleteBook(id)
             .then(() => {
-                loadSavedBooks();
+                loadSavedBooks(statusFilter); // Reload books after delete with current status filter
             })
             .catch(err => console.log(err));
     };
@@ -64,7 +66,7 @@ const MyShelves = () => {
     };
 
     const handleRefresh = () => {
-        window.location.reload();
+        loadSavedBooks(statusFilter); // Refresh with current status filter
     };
 
     const sortByTitle = (e) => {
@@ -85,9 +87,14 @@ const MyShelves = () => {
     const handleStatusChange = (id, newStatus) => {
         API.updateBookStatus(id, newStatus)
             .then(() => {
-                loadSavedBooks(); // Reload books after status change
+                loadSavedBooks(statusFilter); // Reload books after status change with current filter
             })
             .catch(err => console.log(err));
+    };
+
+    const handleStatusFilter = (status) => {
+        setStatusFilter(status);
+        loadSavedBooks(status); // Load books with selected status
     };
 
     return (
@@ -122,92 +129,88 @@ const MyShelves = () => {
                     </Button>
                 </InputGroup>
             </div>
-            <div>
+            <div className='dropdown-container'>
                 <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        Status: All
+                        Status: {statusFilter === 'all' ? 'All' : statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => loadSavedBooks('not started')}>Not Started</Dropdown.Item>
-                        <Dropdown.Item onClick={() => loadSavedBooks('in progress')}>In Progress</Dropdown.Item>
-                        <Dropdown.Item onClick={() => loadSavedBooks('finished')}>Finished</Dropdown.Item>
-                        <Dropdown.Item onClick={() => loadSavedBooks()}>All</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleStatusFilter('all')}>All</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleStatusFilter('not started')}>Not Started</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleStatusFilter('in progress')}>In Progress</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleStatusFilter('finished')}>Finished</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
+                <Dropdown as={ButtonGroup}>
+                    <Button variant='success'>Sort By</Button>
+                    <Dropdown.Toggle split variant='success' id='dropdown-split-basic' />
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={sortByTitle}>Title</Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item onClick={sortByAuthor}>Author</Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item onClick={sortByAddedDate}>Added Time</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+                <Button
+                    className='refresh-btn'
+                    variant='outline-secondary'
+                    onClick={handleRefresh}
+                >
+                    Refresh
+                </Button>
             </div>
             <div>
                 {books.length ? (
-                    <div>
-                        <div className='button-container'>
-                            <Dropdown as={ButtonGroup}>
-                                <Button variant='success'>Sort By</Button>
-                                <Dropdown.Toggle split variant='success' id='dropdown-split-basic' />
-                                <Dropdown.Menu>
-                                    <Dropdown.Item onClick={sortByTitle}>Title</Dropdown.Item>
-                                    <Dropdown.Divider />
-                                    <Dropdown.Item onClick={sortByAuthor}>Author</Dropdown.Item>
-                                    <Dropdown.Divider />
-                                    <Dropdown.Item onClick={sortByAddedDate}>Added Time</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            <Button
-                                className='refresh-btn'
-                                variant='outline-secondary'
-                                onClick={handleRefresh}
-                            >
-                                Refresh
-                            </Button>
-                        </div>
-                        <div className='book-container'>
-                            {books.map((result) => (
-                                <Card
-                                    key={result._id}
-                                    title={result.title || 'No title'}
-                                    authors={result.authors.join(', ') || 'Unknown author'}
-                                    publishedDate={result.publishedDate || 'Not available'}
-                                    pageCount={result.pageCount || 'Not available'}
-                                    categories={result.categories.join(', ') || 'Not available'}
-                                    link={result.link || 'No link available'}
-                                    description={result.description || 'No description available'}
-                                    image={result.image || 'default-image-url'}
-                                    Button={() => (
-                                        <div className='card-actions'>
-                                            <button
-                                                className='btn delete-btn'
-                                                type='button'
-                                                onClick={() => handleBookDelete(result._id)}
-                                            >
-                                                Delete
-                                            </button>
-                                            <div className='added-date'>
-                                                {result.addedDate ? `Added ${new Date(result.addedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}
-                                            </div>
-                                            <button
-                                                className={`btn status-btn ${result.status === 'not started' ? 'not-started-btn' : 'neutral-btn'}`}
-                                                type='button'
-                                                onClick={() => handleStatusChange(result._id, 'not started')}
-                                            >
-                                                Not Started
-                                            </button>
-                                            <button
-                                                className={`btn status-btn ${result.status === 'in progress' ? 'in-progress-btn' : 'neutral-btn'}`}
-                                                type='button'
-                                                onClick={() => handleStatusChange(result._id, 'in progress')}
-                                            >
-                                                In Progress
-                                            </button>
-                                            <button
-                                                className={`btn status-btn ${result.status === 'finished' ? 'finished-btn' : 'neutral-btn'}`}
-                                                type='button'
-                                                onClick={() => handleStatusChange(result._id, 'finished')}
-                                            >
-                                                Finished
-                                            </button>
+                    <div className='book-container'>
+                        {books.map((result) => (
+                            <Card
+                                key={result._id}
+                                title={result.title || 'No title'}
+                                authors={result.authors.join(', ') || 'Unknown author'}
+                                publishedDate={result.publishedDate || 'Not available'}
+                                pageCount={result.pageCount || 'Not available'}
+                                categories={result.categories.join(', ') || 'Not available'}
+                                link={result.link || 'No link available'}
+                                description={result.description || 'No description available'}
+                                image={result.image || 'default-image-url'}
+                                Button={() => (
+                                    <div className='card-actions'>
+                                        <button
+                                            className='btn delete-btn'
+                                            type='button'
+                                            onClick={() => handleBookDelete(result._id)}
+                                        >
+                                            Delete
+                                        </button>
+                                        <div className='added-date'>
+                                            {result.addedDate ? `Added ${new Date(result.addedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}
                                         </div>
-                                    )}
-                                />
-                            ))}
-                        </div>
+                                        <button
+                                            className={`btn status-btn ${result.status === 'not started' ? 'not-started-btn' : 'neutral-btn'}`}
+                                            type='button'
+                                            onClick={() => handleStatusChange(result._id, 'not started')}
+                                        >
+                                            Not Started
+                                        </button>
+                                        <button
+                                            className={`btn status-btn ${result.status === 'in progress' ? 'in-progress-btn' : 'neutral-btn'}`}
+                                            type='button'
+                                            onClick={() => handleStatusChange(result._id, 'in progress')}
+                                        >
+                                            In Progress
+                                        </button>
+                                        <button
+                                            className={`btn status-btn ${result.status === 'finished' ? 'finished-btn' : 'neutral-btn'}`}
+                                            type='button'
+                                            onClick={() => handleStatusChange(result._id, 'finished')}
+                                        >
+                                            Finished
+                                        </button>
+                                    </div>
+                                )}
+                            />
+                        ))}
                     </div>
                 ) : (
                     <h2>{message}</h2>
@@ -218,4 +221,3 @@ const MyShelves = () => {
 };
 
 export default MyShelves;
-
