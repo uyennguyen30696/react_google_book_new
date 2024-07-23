@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
 
+.home {
+    background-color: #f0f0f0; 
+    min-height: 100vh;
+}
+
 .input-with-white-right-border {
     border-right: white !important;
 }
@@ -45,17 +50,27 @@ input {
 }
 
 .book-container {
-    border: solid 1px;
-    border-color: rgb(207, 201, 201) !important;
+    border: none; 
     margin-left: 30px;
     margin-right: 30px;
     margin-bottom: 100px;
+    padding: 10px; 
+}
+
+.card {
+    background-color: #ffffff; 
+    border-color: transparent;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    padding: 10px;
+    padding-bottom: 30px;
+    border: 1px solid rgb(207, 201, 201);
+    margin-bottom: 10px;
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .save-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
     width: 100px;
     background-color: #4C8844;
     color: white;
@@ -69,7 +84,7 @@ input {
 }
 
 .save-btn.saved {
-    background-color: gray; /* Color for the saved button */
+    background-color: gray; 
     border-color: gray;
     cursor: not-allowed; /* Show that the button is not clickable */
 }

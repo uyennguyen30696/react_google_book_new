@@ -10,7 +10,7 @@ const authMiddleware = (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1]; // Extract token from Authorization header
-
+    
     // Verify JWT token
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {

@@ -15,7 +15,6 @@ const Home = () => {
     const [savedBooks, setSavedBooks] = useState(new Set()); // Track saved book IDs for "save button" status control
 
     // Fetch saved books when component mounts
-    // Do this before searching from google book API so books that have been saved for the logged in user will not have active save button anymore
     useEffect(() => {
         API.getSavedBooks()
             .then((res) => {
@@ -31,7 +30,7 @@ const Home = () => {
         setSearchTriggered(true);
         API.getBooks(input)
             .then((res) => {
-                console.log('API data', res.data.items)
+                console.log('API data', res.data.items);
                 setBooks(res.data.items);
                 setMessage(res.data.items.length === 0 ? 'No book matches your search!' : '');
             })
