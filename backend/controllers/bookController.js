@@ -5,6 +5,7 @@ const UserBooks = require('../models/userBooks');
 const addBook = async (req, res) => {
     const bookData = req.body; 
     const userId = req.user.userId; // Get the user ID from the authenticated request
+    const addedDate = new Date();
 
     try {
         // Check if book exists in the books collection
@@ -24,11 +25,11 @@ const addBook = async (req, res) => {
             return res.status(400).json({ message: 'Book already in user\'s collection.' });
         }
 
-        const userBook = new UserBooks({ user: userId, book: book._id }); // Save ObjectId
+        const userBook = new UserBooks({ user: userId, book: book._id, addedDate: addedDate  });
         await userBook.save();
         res.status(201).json({ message: 'Book added to user\'s collection' });
     } catch (error) {
-        console.error('Error adding book:', error); // Detailed error logging
+        console.error('Error adding book:', error); 
         res.status(500).json({ message: error.message });
     }
 };
@@ -40,7 +41,10 @@ const getSavedBooks = async (req, res) => {
     try {
         // Find all books saved by the user and populate book details
         const userBooks = await UserBooks.find({ user: userId }).populate('book');
-        res.status(200).json(userBooks.map(userBook => userBook.book));
+        res.status(200).json(userBooks.map(userBook => ({
+            ...userBook.book.toObject(),
+            addedDate: userBook.addedDate 
+        })));
     } catch (error) {
         console.error('Error retrieving saved books:', error);
         res.status(500).json({ error: 'Failed to retrieve user\'s books.' });
@@ -54,7 +58,7 @@ const deleteBook = async (req, res) => {
 
     try {
         // Step 1: Remove the book from the user's collection
-        const result = await UserBooks.findOneAndDelete({ user: userId, book: id }); // Use ObjectId for deletion
+        const result = await UserBooks.findOneAndDelete({ user: userId, book: id }); 
         if (!result) {
             return res.status(404).json({ error: 'Book not found in user\'s collection.' });
         }

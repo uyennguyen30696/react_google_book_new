@@ -12,14 +12,13 @@ const Home = () => {
     const [input, setInput] = useState('');
     const [message, setMessage] = useState('Search for books to begin!');
     const [searchTriggered, setSearchTriggered] = useState(false);  
-    const [savedBooks, setSavedBooks] = useState(new Set()); // Track saved book IDs for "save button" status control
+    const [savedBooks, setSavedBooks] = useState([]); // Track saved books with addedDate
 
     // Fetch saved books when component mounts
     useEffect(() => {
         API.getSavedBooks()
             .then((res) => {
-                const savedBookIds = new Set(res.data.map(book => book.googleId));
-                setSavedBooks(savedBookIds);
+                setSavedBooks(res.data); // Set saved books including addedDate
             })
             .catch((err) => console.log(err));
     }, []);
@@ -66,6 +65,8 @@ const Home = () => {
 
     const handleBookSave = (id) => {
         const book = books.find((book) => book.id === id);
+        const addedDate = new Date().toISOString(); // Get the current date and time in ISO format
+        console.log('Date', addedDate);
 
         API.addBook({
             googleId: book.id,
@@ -76,11 +77,13 @@ const Home = () => {
             categories: book.volumeInfo.categories,
             link: book.volumeInfo.infoLink,
             image: book.volumeInfo.imageLinks.thumbnail,
-            description: book.volumeInfo.description
+            description: book.volumeInfo.description,
+            addedDate: addedDate // Include addedDate in the request payload
         })
             .then(() => {
-                // Update savedBooks state after saving
-                setSavedBooks(prev => new Set(prev).add(id));
+                API.getSavedBooks()
+                    .then((res) => setSavedBooks(res.data)) // Update savedBooks with addedDate
+                    .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
     };
@@ -138,14 +141,26 @@ const Home = () => {
                                 description={result.volumeInfo.description || 'No description available'}  // Default description
                                 image={result.volumeInfo.imageLinks?.thumbnail || 'default-image-url'}  // Fallback to default image if not available
                                 Button={() => (
-                                    <Button
-                                        className={`save-btn ${savedBooks.has(result.id) ? 'saved' : ''}`}
-                                        type='button'
-                                        onClick={() => !savedBooks.has(result.id) && handleBookSave(result.id)}
-                                        disabled={savedBooks.has(result.id)}
-                                    >
-                                        {savedBooks.has(result.id) ? 'Saved' : 'Save'}
-                                    </Button>
+                                    <div>
+                                        <Button
+                                            className={`save-btn ${savedBooks.some(book => book.googleId === result.id) ? 'saved' : ''}`}
+                                            type='button'
+                                            onClick={() => !savedBooks.some(book => book.googleId === result.id) && handleBookSave(result.id)}
+                                            disabled={savedBooks.some(book => book.googleId === result.id)}
+                                        >
+                                            {savedBooks.some(book => book.googleId === result.id) ? 'Saved' : 'Save'}
+                                        </Button>
+                                        {/* Display the added date if the book is saved */}
+                                        {savedBooks.some(book => book.googleId === result.id) && (
+                                            <p className='added-date'>
+                                                Added {new Date(savedBooks.find(book => book.googleId === result.id).addedDate).toLocaleDateString('en-US', {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                    year: 'numeric'
+                                                })}
+                                            </p>
+                                        )}
+                                    </div>
                                 )}
                             />
                         ))}

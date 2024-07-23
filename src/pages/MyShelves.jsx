@@ -137,19 +137,25 @@ const MyShelves = () => {
                                     title={result.title || 'No title'}
                                     authors={result.authors.join(', ') || 'Unknown author'}
                                     publishedDate={result.publishedDate || 'Not available'}
-                                    pageCount={result.pageCount || 'Not available'} 
-                                    categories={result.categories.join(', ') || 'Not available'} 
+                                    pageCount={result.pageCount || 'Not available'}
+                                    categories={result.categories.join(', ') || 'Not available'}
                                     link={result.link || 'No link available'}
                                     description={result.description || 'No description available'}
                                     image={result.image || 'default-image-url'}
                                     Button={() => (
-                                        <button
-                                            className='btn delete-btn'
-                                            type='button'
-                                            onClick={() => handleBookDelete(result._id)}
-                                        >
-                                            Delete
-                                        </button>
+                                        <div className='card-actions'>
+                                            <button
+                                                className='btn delete-btn'
+                                                type='button'
+                                                onClick={() => handleBookDelete(result._id)}
+                                            >
+                                                Delete
+                                            </button>
+                                            {/* Display the added date under the delete button */}
+                                            <div className='added-date'>
+                                                {result.addedDate ? `Added ${new Date(result.addedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}
+                                            </div>
+                                        </div>
                                     )}
                                 />
                             ))}

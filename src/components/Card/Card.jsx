@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { format } from 'date-fns';
 import './card.css';
 
-const Card = ({ title, authors, categories, publishedDate, pageCount, link, description, image, Button }) => {
+const Card = ({ title, authors, categories, publishedDate, pageCount, link, description, image, Button, addedDate }) => {
     const [expanded, setExpanded] = useState(false);
 
     // Set the number of characters to show before truncating
@@ -42,6 +43,7 @@ const Card = ({ title, authors, categories, publishedDate, pageCount, link, desc
                 </div>
                 <div className="card-button">
                     <Button />
+                    {addedDate && <p className='added-date'>{`Added ${format(new Date(addedDate), 'MMM d, yyyy')}`}</p>}
                 </div>
             </div>
         </div>
