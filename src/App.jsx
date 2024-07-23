@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
 import MyShelves from './pages/MyShelves'
+import Statistics from './pages/Statistics'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route exact path='/register' element={<Register />} />
           <Route path='/' element={<Home />} />
           <Route path='/my-shelves' element={<MyShelves />} />
+          <Route path='/statistics' element={<Statistics/>} />
           <Route path='*' element={<NotFound />} />
         </Routes>
 

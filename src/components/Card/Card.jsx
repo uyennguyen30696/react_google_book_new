@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './style.css';
+import './card.css';
 
 const Card = ({ title, authors, categories, publishedDate, pageCount, link, description, image, Button }) => {
     const [expanded, setExpanded] = useState(false);

@@ -1,7 +1,7 @@
 import { Navbar, Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './style.css';
+import './navBar.css';
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -27,6 +27,7 @@ const NavBar = () => {
                         {token ? (
                             <>
                                 <Nav.Link href='/my-shelves'>MY SHELVES</Nav.Link>
+                                <Nav.Link href='/statistics'>STATISTICS</Nav.Link>
                                 <Nav.Link onClick={handleLogout}>LOG OUT</Nav.Link>
                             </>
                         ) : (

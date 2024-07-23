@@ -1,4 +1,4 @@
-import './style.css'
+import './jumbotron.css'
 
 const Jumbotron = () => {
     return (
