@@ -77,6 +77,11 @@ const MyShelves = () => {
         setBooks([...books].sort((a, b) => a.authors[0].localeCompare(b.authors[0])));
     };
 
+    const sortByAddedDate = (e) => {
+        e.preventDefault();
+        setBooks([...books].sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate)));
+    };
+
     return (
         <div className='my-shelves'>
             <Jumbotron />
@@ -120,6 +125,8 @@ const MyShelves = () => {
                                     <Dropdown.Item onClick={sortByTitle}>Title</Dropdown.Item>
                                     <Dropdown.Divider />
                                     <Dropdown.Item onClick={sortByAuthor}>Author</Dropdown.Item>
+                                    <Dropdown.Divider />
+                                    <Dropdown.Item onClick={sortByAddedDate}>Added Time</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Button
