@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const API = {
-    
+
     // Method for user register
     register: (username, password) => axios.post('/api/auth/register', { username, password }),
 
@@ -22,9 +22,10 @@ const API = {
     },
 
     // Method for retrieving all saved books from database for the logged in user
-    getSavedBooks: () => {
+    getSavedBooks: (status = 'not started') => {
         const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
-        return axios.get('/api/books', { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
+        const url = status === 'all' ? '/api/books' : `/api/books?status=${status}`;
+        return axios.get(url, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
     },
 
     // Method for deleting a book
@@ -37,6 +38,12 @@ const API = {
     getOneSavedBook: (title) => {
         const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
         return axios.post('/api/books/search', title, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
+    },
+
+    // Method for updating the status of a book
+    updateBookStatus: (id, newStatus) => {
+        const token = sessionStorage.getItem('token'); // Retrieve JWT token from sessionStorage
+        return axios.put(`/api/books/${id}/status`, { bookId: id, status: newStatus }, { headers: { Authorization: `Bearer ${token}` } }); // Include token in request headers
     },
 };
 

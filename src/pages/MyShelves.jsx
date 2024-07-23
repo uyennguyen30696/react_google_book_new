@@ -13,8 +13,8 @@ const MyShelves = () => {
     const [message, setMessage] = useState('You have no saved book yet!');
 
     useEffect(() => {
-        loadSavedBooks();
-    }, []);
+        loadSavedBooks(); // Load books initially
+    }, []); 
 
     const loadSavedBooks = () => {
         API.getSavedBooks()
@@ -60,11 +60,11 @@ const MyShelves = () => {
     };
 
     const handleClearInput = () => {
-        setTitle(''); // Clear the input field
+        setTitle('');
     };
 
     const handleRefresh = () => {
-        window.location.reload(); // Reload the current page
+        window.location.reload();
     };
 
     const sortByTitle = (e) => {
@@ -82,6 +82,14 @@ const MyShelves = () => {
         setBooks([...books].sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate)));
     };
 
+    const handleStatusChange = (id, newStatus) => {
+        API.updateBookStatus(id, newStatus)
+            .then(() => {
+                loadSavedBooks(); // Reload books after status change
+            })
+            .catch(err => console.log(err));
+    };
+
     return (
         <div className='my-shelves'>
             <Jumbotron />
@@ -96,7 +104,7 @@ const MyShelves = () => {
                         onKeyDown={handleEnterKey}
                         value={title}
                     />
-                    {title && ( // Show clear button only if there's text in the input
+                    {title && (
                         <Button
                             className='clear-btn'
                             variant='outline-secondary'
@@ -113,6 +121,19 @@ const MyShelves = () => {
                         Search
                     </Button>
                 </InputGroup>
+            </div>
+            <div>
+                <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        Status: All
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => loadSavedBooks('not started')}>Not Started</Dropdown.Item>
+                        <Dropdown.Item onClick={() => loadSavedBooks('in progress')}>In Progress</Dropdown.Item>
+                        <Dropdown.Item onClick={() => loadSavedBooks('finished')}>Finished</Dropdown.Item>
+                        <Dropdown.Item onClick={() => loadSavedBooks()}>All</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
             <div>
                 {books.length ? (
@@ -158,10 +179,30 @@ const MyShelves = () => {
                                             >
                                                 Delete
                                             </button>
-                                            {/* Display the added date under the delete button */}
                                             <div className='added-date'>
                                                 {result.addedDate ? `Added ${new Date(result.addedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}
                                             </div>
+                                            <button
+                                                className={`btn status-btn ${result.status === 'not started' ? 'not-started-btn' : 'neutral-btn'}`}
+                                                type='button'
+                                                onClick={() => handleStatusChange(result._id, 'not started')}
+                                            >
+                                                Not Started
+                                            </button>
+                                            <button
+                                                className={`btn status-btn ${result.status === 'in progress' ? 'in-progress-btn' : 'neutral-btn'}`}
+                                                type='button'
+                                                onClick={() => handleStatusChange(result._id, 'in progress')}
+                                            >
+                                                In Progress
+                                            </button>
+                                            <button
+                                                className={`btn status-btn ${result.status === 'finished' ? 'finished-btn' : 'neutral-btn'}`}
+                                                type='button'
+                                                onClick={() => handleStatusChange(result._id, 'finished')}
+                                            >
+                                                Finished
+                                            </button>
                                         </div>
                                     )}
                                 />
@@ -169,7 +210,7 @@ const MyShelves = () => {
                         </div>
                     </div>
                 ) : (
-                    <h2 id='saved-message'>{message}</h2>
+                    <h2>{message}</h2>
                 )}
             </div>
         </div>
@@ -177,3 +218,4 @@ const MyShelves = () => {
 };
 
 export default MyShelves;
+

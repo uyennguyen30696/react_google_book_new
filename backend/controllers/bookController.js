@@ -6,6 +6,7 @@ const addBook = async (req, res) => {
     const bookData = req.body; 
     const userId = req.user.userId; // Get the user ID from the authenticated request
     const addedDate = new Date();
+    const status = req.body.status || 'not started'; // Default status if not provided
 
     try {
         // Check if book exists in the books collection
@@ -25,7 +26,7 @@ const addBook = async (req, res) => {
             return res.status(400).json({ message: 'Book already in user\'s collection.' });
         }
 
-        const userBook = new UserBooks({ user: userId, book: book._id, addedDate: addedDate  });
+        const userBook = new UserBooks({ user: userId, book: book._id, addedDate: addedDate, status: status });
         await userBook.save();
         res.status(201).json({ message: 'Book added to user\'s collection' });
     } catch (error) {
@@ -43,7 +44,8 @@ const getSavedBooks = async (req, res) => {
         const userBooks = await UserBooks.find({ user: userId }).populate('book');
         res.status(200).json(userBooks.map(userBook => ({
             ...userBook.book.toObject(),
-            addedDate: userBook.addedDate 
+            addedDate: userBook.addedDate,
+            status: userBook.status
         })));
     } catch (error) {
         console.error('Error retrieving saved books:', error);
@@ -105,4 +107,25 @@ const getOneSavedBook = async (req, res) => {
     }
 };
 
-module.exports = { addBook, getSavedBooks, deleteBook, getOneSavedBook };
+// Update the status of a book in the user's collection
+const updateBookStatus = async (req, res) => {
+    const { bookId, status } = req.body; // Get the book ID and status from the request body
+    const userId = req.user.userId; // Get the user ID from the authenticated request
+
+    try {
+        // Find the book in the user's collection
+        const userBook = await UserBooks.findOne({ user: userId, book: bookId });
+        if (!userBook) {
+            return res.status(404).json({ message: 'Book not found in user\'s collection.' });
+        }
+
+        userBook.status = status; 
+        await userBook.save();
+        res.status(200).json({ message: 'Book status updated', userBook });
+    } catch (error) {
+        console.error('Error updating book status:', error);
+        res.status(500).json({ message: 'Failed to update book status.' });
+    }
+};
+
+module.exports = { addBook, getSavedBooks, deleteBook, getOneSavedBook, updateBookStatus };
