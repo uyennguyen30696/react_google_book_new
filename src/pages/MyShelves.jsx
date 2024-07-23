@@ -136,6 +136,9 @@ const MyShelves = () => {
                                     key={result._id}
                                     title={result.title || 'No title'}
                                     authors={result.authors.join(', ') || 'Unknown author'}
+                                    publishedDate={result.publishedDate || 'Not available'}
+                                    pageCount={result.pageCount || 'Not available'} 
+                                    categories={result.categories.join(', ') || 'Not available'} 
                                     link={result.link || 'No link available'}
                                     description={result.description || 'No description available'}
                                     image={result.image || 'default-image-url'}

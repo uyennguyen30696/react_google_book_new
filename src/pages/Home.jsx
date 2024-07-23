@@ -71,9 +71,12 @@ const Home = () => {
             googleId: book.id,
             title: book.volumeInfo.title,
             authors: book.volumeInfo.authors,
+            publishedDate: book.volumeInfo.publishedDate,
+            pageCount: book.volumeInfo.pageCount,
+            categories: book.volumeInfo.categories,
             link: book.volumeInfo.infoLink,
             image: book.volumeInfo.imageLinks.thumbnail,
-            description: book.volumeInfo.description,
+            description: book.volumeInfo.description
         })
             .then(() => {
                 // Update savedBooks state after saving
@@ -128,6 +131,9 @@ const Home = () => {
                                 key={result.id}
                                 title={result.volumeInfo.title || 'No title'}  // Default to 'No title'
                                 authors={(result.volumeInfo.authors || []).join(', ')}  // Default to empty array
+                                categories={(result.volumeInfo.categories || []).join(', ')}  // Default empty array
+                                publishedDate={result.volumeInfo.publishedDate || 'Not available'} // Default published date
+                                pageCount={result.volumeInfo.pageCount || 'Not available'} // Default page count
                                 link={result.volumeInfo.infoLink || 'No link available'}  // Default link text
                                 description={result.volumeInfo.description || 'No description available'}  // Default description
                                 image={result.volumeInfo.imageLinks?.thumbnail || 'default-image-url'}  // Fallback to default image if not available

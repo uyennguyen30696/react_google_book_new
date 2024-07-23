@@ -17,7 +17,11 @@ const searchBooks = (req, res) => {
             item.volumeInfo.infoLink &&
             item.volumeInfo.authors &&
             item.volumeInfo.description &&
-            item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail
+            item.volumeInfo.imageLinks && 
+            item.volumeInfo.imageLinks.thumbnail &&
+            item.volumeInfo.publishedDate &&
+            item.volumeInfo.pageCount && 
+            item.volumeInfo.categories
         );
         res.json({ items: filteredItems });
     })

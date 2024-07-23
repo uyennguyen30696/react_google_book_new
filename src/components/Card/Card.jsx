@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style.css';
 
-const Card = ({ title, authors, link, description, image, Button }) => {
+const Card = ({ title, authors, categories, publishedDate, pageCount, link, description, image, Button }) => {
     const [expanded, setExpanded] = useState(false);
 
     // Set the number of characters to show before truncating
@@ -24,7 +24,10 @@ const Card = ({ title, authors, link, description, image, Button }) => {
                 </div>
                 <div className="card-info">
                     <h4>{title}</h4>
-                    <p>{authors}</p>
+                    <p>Authors: {authors}</p>
+                    <p>Categories: {categories}</p>
+                    <p>Published on: {publishedDate}</p>
+                    <p>Page count: {pageCount}</p>
                     <a href={link} target="_blank" rel="noreferrer">
                         View on Google Books
                     </a>
