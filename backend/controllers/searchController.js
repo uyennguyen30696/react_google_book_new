@@ -7,7 +7,8 @@ const searchBooks = (req, res) => {
     axios.get('https://www.googleapis.com/books/v1/volumes', {
         params: {
             q: q, 
-            maxResults: 20 
+            maxResults: 20,
+            key: process.env.REACT_APP_GOOGLE_BOOKS_API_KEY 
         }
     })
     .then(response => {
