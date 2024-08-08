@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Move files to custom directory
-        run: sudo mv -f * /home/ubuntu/react_google_book_new
+        run: ls -lah; ls /home/; sudo mv -f * /home/ubuntu/react_google_book_new
 
       - name: Verify files in custom directory
         run: ls /home/ubuntu/react_google_book_new
