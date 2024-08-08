@@ -9,12 +9,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Move files to custom directory
-        run: ls -lah; ls /home/; sudo mv -f * /home/ubuntu/react_google_book_new
-
-      - name: Verify files in custom directory
-        run: ls /home/ubuntu/react_google_book_new
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -22,12 +16,12 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/react_google_book_new/backend
-            pwd
+            cd /home/ubuntu/react_google_book_new
+            git pull origin main
+            cd backend
             npm install
             pm2 restart all
             cd /home/ubuntu/react_google_book_new
-            pwd
             npm install
             npm run build
             sudo rm -rf /var/www/html/dist
