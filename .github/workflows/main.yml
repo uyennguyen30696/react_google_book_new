@@ -15,15 +15,18 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/react_google_book_new
+            pwd
             git pull origin main
             cd backend
             npm install
             pm2 restart all
             cd ../
+            pwd
             npm install
             npm run build
             sudo rm -rf /var/www/html/dist
             cp -R dist /var/www/html
             cd /var/www/html
+            pwd
             sudo chown -R www-data:www-data dist
             sudo service nginx restart
