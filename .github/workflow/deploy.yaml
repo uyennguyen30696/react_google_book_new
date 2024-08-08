@@ -1,0 +1,29 @@
+name: Deploy to EC2
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.3.1
+        with:
+          host: ${{ secrets.HOST_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu/react_google_book_new
+            git pull origin main
+            cd backend
+            npm install
+            pm2 restart all
+            cd ../
+            npm install
+            npm run build
+            sudo rm -rf /var/www/html/dist
+            cp -R dist /var/www/html
+            cd /var/www/html
+            sudo chown -R www-data:www-data dist
+            sudo service nginx restart
