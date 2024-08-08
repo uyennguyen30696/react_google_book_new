@@ -6,7 +6,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repo
       - uses: actions/checkout@v4
+
+      - name: Create custom directory
+        run: sudo mkdir -p ~/custom-directory
+
+      - name: Move files to custom directory
+        run: sudo mv * ~/custom-directory
+
+      - name: Verify files in custom directory
+        run: ls ~/custom-directory
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
