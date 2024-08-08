@@ -6,7 +6,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -25,7 +25,7 @@ jobs:
             npm install
             npm run build
             sudo rm -rf /var/www/html/dist
-            cp -R dist /var/www/html
+            sudo cp -R dist /var/www/html
             cd /var/www/html
             pwd
             sudo chown -R www-data:www-data dist
