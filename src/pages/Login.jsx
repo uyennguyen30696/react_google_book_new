@@ -23,9 +23,12 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await API.login(username, password);
-            sessionStorage.setItem('token', response.data.token); // Store JWT token in sessionStorage
-            sessionStorage.setItem('username', username); // Store username in sessionStorage
-            navigate('/'); // Redirect to home page on successful login
+            if(response.data?.token){
+                sessionStorage.setItem('token', response.data.token); // Store JWT token in sessionStorage
+                sessionStorage.setItem('username', username); // Store username in sessionStorage
+                navigate('/'); // Redirect to home page on successful login
+            }
+            setMessage('Invalid token'); // Clear any previous error message
         } catch (error) {
             setMessage(error.response?.data?.message || 'An error occurred');
         }

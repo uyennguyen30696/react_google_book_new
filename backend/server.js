@@ -8,12 +8,18 @@ const authMiddleware = require('./services/authMiddleware'); // Import middlewar
 require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
+
+const corsOptions = {
+    origin: '*', // Replace with your allowed origin
+    optionsSuccessStatus: 200,
+    credentials: true, // Allow credentials (cookies, authorization headers)
+};
+app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(cors(corsOptions)); // Middleware to allow cross-origin requests
+
 const PORT = process.env.PORT || 3001;
 
 connectDB(); // Connect to MongoDB
-
-app.use(express.json()); // Middleware to parse JSON request bodies
-app.use(cors()); // Middleware to allow cross-origin requests
 
 app.use('/api/auth', authRoutes); // Public routes for user authentication
 app.use('/api', apiRoutes); // Public API routes for Google Books API
