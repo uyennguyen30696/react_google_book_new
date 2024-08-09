@@ -26,3 +26,8 @@
     background-color: grey;
     border-color: grey;
 }
+
+#login-btn:hover {
+    background-color: darkgrey;
+    border-color: transparent;
+}
